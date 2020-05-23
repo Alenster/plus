@@ -1,20 +1,69 @@
-﻿// Convert.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿#pragma once
 #include <iostream>
+
+
+
+#define NUMBER_SYSTEM_BASE_CODE -1;
+#define NUMBER_SYSTEM_BASE_TEXT "Система счислений меньше 2!"; //#define NUMBER_SYSTEM_BASE_TEXT "The base of the number system is less than 2!";
+
+#define NUMBER_NOT_NULL_CODE 101;
+#define NUMBER_NOT_NULL_TEXT "Число не может быть 0!";  //#define NUMBER_NOT_NULL_TEXT "The number must not be zero!";
+
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    cout << "Hello World!\n";
+    setlocale(LC_ALL, "Russian");
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+char digit(int num)
+{
+    switch (num) {
+    case 0: return '0';
+    case 1: return '1';
+    case 2: return '2';
+    case 3: return '3';
+    case 4: return '4';
+    case 5: return '5';
+    case 6: return '6';
+    case 7: return '7';
+    case 8: return '8';
+    case 9: return '9';
+    case 10: return 'A';
+    case 11: return 'B';
+    case 12: return 'C';
+    case 13: return 'D';
+    case 14: return 'E';
+    case 15: return 'F';
+    }
+}
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+class NumberError
+    {
+
+    };
+class NumberSystemBase :NumberError {
+public:
+    virtual const char* getMessage() { return NUMBER_SYSTEM_BASE_TEXT; };
+    virtual int getCode() { return NUMBER_SYSTEM_BASE_CODE; };
+
+};
+
+int integerPart(int a, int p, char* s) {
+
+    if (p < 2) {
+        throw new NumberSystemBase();
+    }
+
+    int num = (int)a;
+    int rest = num % p;
+    num /= p;
+    if (num == 0)
+    {
+        s[0] = digit(rest); return 1;
+    }
+    int k = integerPart(num, p, s);
+    s[k++] = digit(rest);
+    return k;
+}
